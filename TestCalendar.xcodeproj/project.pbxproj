@@ -16,11 +16,10 @@
 		5117C3E12A96925700537104 /* DetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5117C3E02A96925700537104 /* DetailsViewController.swift */; };
 		5117C3E42A97590D00537104 /* FSCalendar in Frameworks */ = {isa = PBXBuildFile; productRef = 5117C3E32A97590D00537104 /* FSCalendar */; };
 		5117C3E62A97A6F200537104 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5117C3E52A97A6F200537104 /* Model.swift */; };
-		5117C3E82A97A71500537104 /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5117C3E72A97A71500537104 /* DataManager.swift */; };
-		5117C3EA2A97B23E00537104 /* russia_losses_equipment.json in Resources */ = {isa = PBXBuildFile; fileRef = 5117C3E92A97B23E00537104 /* russia_losses_equipment.json */; };
-		5117C3EE2A988A1400537104 /* russia_losses_personnel.json in Resources */ = {isa = PBXBuildFile; fileRef = 5117C3ED2A988A1400537104 /* russia_losses_personnel.json */; };
 		5117C3F82A9A487100537104 /* CircleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5117C3F72A9A487100537104 /* CircleCollectionViewCell.swift */; };
 		5117C3FA2A9BCDFF00537104 /* LossesSmallCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5117C3F92A9BCDFF00537104 /* LossesSmallCollectionViewCell.swift */; };
+		517DE3BA2AA3645D008027AB /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 517DE3B92AA3645D008027AB /* NetworkManager.swift */; };
+		517DE3BD2AA37F7B008027AB /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 517DE3BC2AA37F7B008027AB /* Alamofire */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,11 +33,9 @@
 		5117C3DA2A968C4C00537104 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5117C3E02A96925700537104 /* DetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsViewController.swift; sourceTree = "<group>"; };
 		5117C3E52A97A6F200537104 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
-		5117C3E72A97A71500537104 /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
-		5117C3E92A97B23E00537104 /* russia_losses_equipment.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = russia_losses_equipment.json; sourceTree = "<group>"; };
-		5117C3ED2A988A1400537104 /* russia_losses_personnel.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = russia_losses_personnel.json; sourceTree = "<group>"; };
 		5117C3F72A9A487100537104 /* CircleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleCollectionViewCell.swift; sourceTree = "<group>"; };
 		5117C3F92A9BCDFF00537104 /* LossesSmallCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LossesSmallCollectionViewCell.swift; sourceTree = "<group>"; };
+		517DE3B92AA3645D008027AB /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,6 +44,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5117C3E42A97590D00537104 /* FSCalendar in Frameworks */,
+				517DE3BD2AA37F7B008027AB /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,7 +76,6 @@
 				5117C3FB2A9BD7F700537104 /* Model */,
 				5117C3FE2A9BD85A00537104 /* CustomCells */,
 				5117C3FF2A9BD87C00537104 /* Resources */,
-				5117C4012A9BD9D300537104 /* JSON */,
 			);
 			path = TestCalendar;
 			sourceTree = "<group>";
@@ -132,18 +129,9 @@
 		5117C4002A9BD94900537104 /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				5117C3E72A97A71500537104 /* DataManager.swift */,
+				517DE3B92AA3645D008027AB /* NetworkManager.swift */,
 			);
 			path = Managers;
-			sourceTree = "<group>";
-		};
-		5117C4012A9BD9D300537104 /* JSON */ = {
-			isa = PBXGroup;
-			children = (
-				5117C3E92A97B23E00537104 /* russia_losses_equipment.json */,
-				5117C3ED2A988A1400537104 /* russia_losses_personnel.json */,
-			);
-			path = JSON;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -164,6 +152,7 @@
 			name = TestCalendar;
 			packageProductDependencies = (
 				5117C3E32A97590D00537104 /* FSCalendar */,
+				517DE3BC2AA37F7B008027AB /* Alamofire */,
 			);
 			productName = TestCalendar;
 			productReference = 5117C3C92A968C4A00537104 /* TestCalendar.app */;
@@ -195,6 +184,7 @@
 			mainGroup = 5117C3C02A968C4A00537104;
 			packageReferences = (
 				5117C3E22A97590D00537104 /* XCRemoteSwiftPackageReference "FSCalendar" */,
+				517DE3BB2AA37F7B008027AB /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 5117C3CA2A968C4A00537104 /* Products */;
 			projectDirPath = "";
@@ -212,8 +202,6 @@
 			files = (
 				5117C3D92A968C4C00537104 /* LaunchScreen.storyboard in Resources */,
 				5117C3D62A968C4C00537104 /* Assets.xcassets in Resources */,
-				5117C3EA2A97B23E00537104 /* russia_losses_equipment.json in Resources */,
-				5117C3EE2A988A1400537104 /* russia_losses_personnel.json in Resources */,
 				5117C3D42A968C4A00537104 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -225,8 +213,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				517DE3BA2AA3645D008027AB /* NetworkManager.swift in Sources */,
 				5117C3E62A97A6F200537104 /* Model.swift in Sources */,
-				5117C3E82A97A71500537104 /* DataManager.swift in Sources */,
 				5117C3F82A9A487100537104 /* CircleCollectionViewCell.swift in Sources */,
 				5117C3E12A96925700537104 /* DetailsViewController.swift in Sources */,
 				5117C3D12A968C4A00537104 /* ViewController.swift in Sources */,
@@ -462,6 +450,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		517DE3BB2AA37F7B008027AB /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -469,6 +465,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 5117C3E22A97590D00537104 /* XCRemoteSwiftPackageReference "FSCalendar" */;
 			productName = FSCalendar;
+		};
+		517DE3BC2AA37F7B008027AB /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 517DE3BB2AA37F7B008027AB /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

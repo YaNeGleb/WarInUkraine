@@ -20,6 +20,14 @@ class ViewController: UIViewController {
     var russiaLossesPersonnel: [RussiaLossesPersonnel] = []
     
     // MARK: - UI Elements
+    private let activityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .white
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        indicator.hidesWhenStopped = true
+        return indicator
+    }()
+    
     private let gloryToUkraineLabel: UILabel = {
         let label = UILabel()
         label.textAlignment = .left
@@ -143,14 +151,34 @@ class ViewController: UIViewController {
         setupInitialDates()
         setupLabel()
         setupConstraints()
+        setupSwipeGestureRecognizer()
+    }
+    
+    private func setupSwipeGestureRecognizer() {
+        let swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(addButtonTapped))
+        swipeRightGestureRecognizer.direction = .left
+        self.view.addGestureRecognizer(swipeRightGestureRecognizer)
     }
     
     private func loadAndSetupData() {
-        russiaLossesPersonnel = DataManager.shared.loadPersonalFromJSON()
-        availableDates = DataManager.shared.loadAvailableDatesFromJSON()
-        russiaLossesEquipment = DataManager.shared.loadFromJSON()
+        activityIndicator.startAnimating()
+        
+        let dataDispatchGroup = DispatchGroup()
+        
+        dataDispatchGroup.enter()
+        loadEquipmentData(group: dataDispatchGroup)
+        
+        dataDispatchGroup.enter()
+        loadPersonnelData(group: dataDispatchGroup)
+        
+        dataDispatchGroup.notify(queue: .main) {
+            self.collectionView.reloadData()
+            self.setupInitialDates()
+            self.setupLabel()
+            self.activityIndicator.stopAnimating()
+        }
     }
-    
+
     private func setupLabel() {
         let attributedText = generateAttributedHeaderText()
         gloryToUkraineLabel.attributedText = attributedText
@@ -161,7 +189,6 @@ class ViewController: UIViewController {
             lossesOccupiersLabel.text = "Втрати окупантів\nНа невідома дата"
         }
     }
-    
     
     private func setupInitialDates() {
         if let lastEquipmentDateString = russiaLossesEquipment.last?.date {
@@ -225,6 +252,7 @@ class ViewController: UIViewController {
     }
     
     func setupConstraints() {
+        view.addSubview(activityIndicator)
         view.addSubview(calendarContainerView)
         view.addSubview(calendar)
         view.addSubview(gloryToUkraineLabel)
@@ -283,6 +311,11 @@ class ViewController: UIViewController {
             dayWarLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             dayWarLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
         ])
+        
+        NSLayoutConstraint.activate([
+            activityIndicator.topAnchor.constraint(equalTo: dayWarLabel.bottomAnchor, constant: 30),
+            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
     }
     
     // MARK: - Methods
@@ -319,7 +352,8 @@ class ViewController: UIViewController {
     private func updateDayWarLabel() {
         guard let selectedDate = selectedDateString else { return }
         if let selectedLossesAndEquipment = getSelectedLossesAndEquipment(dateString: selectedDate) {
-            dayWarLabel.text = "\(selectedLossesAndEquipment.day) день війни"
+            let description = "день війни"
+            animateNumberChange(to: selectedLossesAndEquipment.day, label: dayWarLabel, description: description)
         } else {
             dayWarLabel.text = "День війни не відомий"
         }
@@ -343,6 +377,12 @@ class ViewController: UIViewController {
     }
     
     // MARK: - Actions
+    private func animateNumberChange(to newValue: Int, label: UILabel, description: String) {
+        UIView.transition(with: label, duration: 0.3, options: .transitionCrossDissolve, animations: {
+            label.text = "\(newValue) \(description)"
+        }, completion: nil)
+    }
+    
     @objc func addButtonTapped() {
         guard let selectedDateString = selectedDateString,
               let selectedDate = DateFormatter.yyyyMMdd.date(from: selectedDateString) else { return }
@@ -372,6 +412,43 @@ class ViewController: UIViewController {
         if let url = URL(string: "https://uahelp.monobank.ua") {
             let safariViewController = SFSafariViewController(url: url)
             present(safariViewController, animated: true, completion: nil)
+        }
+    }
+    
+    //MARK: - Load Data
+    private func loadEquipmentData(group: DispatchGroup) {
+        DispatchQueue.global().async {
+            NetworkManager.shared.fetchDataEquipment { [weak self] result in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let russiaLossesEquipment):
+                        self.russiaLossesEquipment = russiaLossesEquipment
+                        let dates = russiaLossesEquipment.compactMap { $0.date }
+                        self.availableDates = dates
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                    group.leave()
+                }
+            }
+        }
+    }
+    
+    private func loadPersonnelData(group: DispatchGroup) {
+        DispatchQueue.global().async {
+            NetworkManager.shared.fetchDataPersonnel { [weak self] result in
+                guard let self = self else { return }
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let russiaLossesPersonnel):
+                        self.russiaLossesPersonnel = russiaLossesPersonnel
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                    }
+                    group.leave()
+                }
+            }
         }
     }
 }

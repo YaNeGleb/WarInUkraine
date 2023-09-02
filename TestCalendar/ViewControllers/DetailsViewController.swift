@@ -71,6 +71,8 @@ class DetailsViewController: UIViewController {
         
         navigationController?.navigationBar.tintColor = .black
         navigationController?.navigationBar.barTintColor = UIColor(red: 0, green: 0.5, blue: 1.0, alpha: 1.0)
+        
+        setupSwipeGestureRecognizer()
         setupBackgroundGradient()
         setupConstraints()
         setupData()
@@ -79,6 +81,13 @@ class DetailsViewController: UIViewController {
     }
 
     // MARK: - SetUp Methods
+    
+    private func setupSwipeGestureRecognizer() {
+        let swipeRightGestureRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipeRight))
+        swipeRightGestureRecognizer.direction = .right
+        self.view.addGestureRecognizer(swipeRightGestureRecognizer)
+    }
+    
     private func setupDateLabel() {
         let boldFont = UIFont.boldSystemFont(ofSize: 18)
         let attributes: [NSAttributedString.Key: Any] = [
@@ -156,6 +165,11 @@ class DetailsViewController: UIViewController {
     // MARK: - Methods
     private func calculateDifference(_ newValue: Int, _ previousValue: Int) -> Int {
         return newValue - previousValue
+    }
+    
+    //MARK: - Actions
+    @objc func handleSwipeRight() {
+        self.navigationController?.popViewController(animated: true)
     }
 }
     

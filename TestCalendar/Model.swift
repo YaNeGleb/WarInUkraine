@@ -7,7 +7,7 @@
 
 import Foundation
 
-// MARK: - WelcomeElement
+
 struct RussiaLossesEquipment: Codable {
     let date: String
     let day, aircraft, helicopter, tank: Int
